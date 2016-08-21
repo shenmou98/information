@@ -3,13 +3,16 @@
 ##########################################################
 # File:			qianzhiji_auto_deploy.sh
 # Description:	For QianZhiJi auto deploy.
-# Requirement:	Before run this script, please upload related to related dir.
+# Requirement:	Before run this script, please upload related files as mentioned to related dir.
 # Usage: 		./qianzhiji_auto_deploy.sh
 # Author:		ShenYaJun, hiyajun@126.com
 # Organization:	
 # Created:		2016.8.21 21:28
 # Revision:		0.1
 ###########################################################
+
+# 目前这个脚本， 该往真正的 deploy 脚本里边添加东西了，  deploy_8080开始
+
 
 stg_Dir=/home/siappstg
 prd_Dir=/home/siappprd
@@ -54,27 +57,20 @@ function print_Blue {
 
 # 提示用户把文件拷贝到  8080 webapps下边
 function reminder_upload_files {
-	print_Green "\nPlease upload files to $TomcatDir_8080/webapps, the files are 'mhis-siapp-partner, context-siapp-partner.properties, log4j.properties, siapp-partner-context.xml' "
-	
-	print_Red "\nIf you have upload all the mentioned files, please select 1 to continue; \nIf not, please select 0 to exit and then upload the mentioned files"
+        print_Green "Please upload files to $TomcatDir_8080/webapps, the files are: "        
+		print_Blue "
+  a. mhis-siapp-partner 
+  b. context-siapp-partner.properties 
+  c. log4j.properties
+  d. siapp-partner-context.xml "
+        
+        echo 
+        echo 
+        print_Red "If you have upload all the mentioned files, please select 1 to continuea;  If not, please select 0 to exit and then upload the mentioned files"
 }
 
-#print_Red "红色"
-#print_Green "绿色"
-#print_Blue "蓝色"
-reminder_upload_files
 
-#echo -r
-#echo  "结束" && exit 1
 
-# 提示用户把文件拷贝到  8080 webapps下边
-
-function reminder_upload_files {
-	print_Green "Please upload files to $TomcatDir_8080/webapps, the files are 'mhis-siapp-partner, context-siapp-partner.properties, log4j.properties, siapp-partner-context.xml' "
-	
-	print_Red "If you have upload all the mentioned files, please select 1 to continue; \n
-	If not, please select 0 to exit and then upload the mentioned files"
-}
 
 # This function will backup all mhis-siapp-partner Dir and all logs.
 function backup_8080 {
@@ -160,8 +156,6 @@ function unzip_partner_war {
 	mv -f ./$file3 ./mhis-siapp-partner/WEB-INF/classes/biz && print_Green "move $file3  successful" || ( print_Red "move $file3 failed, Please manual check the reason"; exit 3 )
 }
 
-tomcat_port=s
-tomcat_dir=s
 function check_tomcat_status {
 	#tomcat_port=808x
 	#tomcat_dir=
@@ -185,8 +179,27 @@ function deploy_8080 {
 
 }
 
+function deploy_8081 {
+
+
+
+}
+
+function deploy_8082 {
+
+
+
+}
+
+function deploy_8083 {
+
+
+
+}
 
 function case_select {
+
+reminder_upload_files
 
 echo -e "Welcome to the auto deploy script!
 1. Deploy 8080
