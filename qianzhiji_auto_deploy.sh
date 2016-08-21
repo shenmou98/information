@@ -1,8 +1,15 @@
 #!/bin/bash
-## For s
 
-
-#定义变量  /homt/siappstg  /home/siappprd
+##########################################################
+# File:			qianzhiji_auto_deploy.sh
+# Description:	For QianZhiJi auto deploy.
+# Requirement:	Before run this script, please upload related to related dir.
+# Usage: 		./qianzhiji_auto_deploy.sh
+# Author:		ShenYaJun, hiyajun@126.com
+# Organization:	
+# Created:		2016.8.21 21:28
+# Revision:		0.1
+###########################################################
 
 stg_Dir=/home/siappstg
 prd_Dir=/home/siappprd
@@ -25,15 +32,6 @@ backup_8082=$backup_dir/8082
 backup_8083=$backup_dir/8083
 
 
-
-# 打算是以选项的形式，需要手动一步一步来操作。 比如
-#	先提示用户上传文件，包括war包、三个配置文件。  解压文件， 配置文件替换， 
-
-
-
-# 先把颜色函数写出来，
-#	红色
-#	绿色
 
 # 打印红色信息
 function print_Red {
@@ -86,12 +84,63 @@ function backup_8080 {
 	print_Green "Shutdowning 8080"
 	$8080_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
 	
-	[ -d "$backup_8080" ] && echo " 8080 backup dir already exist" || (mkdir -p $backup_8080; echo "mkdir new dir" )
+	[ -d "$backup_8080" ] && echo " 8080 backup dir already exist" || (mkdir -p $backup_8080; echo "mkdir new backup dir 8080" )
 		
 	mkdir $backup_8080/$current_time/logs
 		
-	mv ${TomcatDir_8080}/webapps/mhis-siapp-partner $backup_8080/$current_time || (echo "backup 8080 mhis-siapp-partner failed, please manual check" ; exit 4 )
-	mv ${TomcatDir_8080}/logs/* $backup_8080/$current_time/logs || (echo "backup 8080 mhis-siapp-partner failed, please manual check" ; exit 5 )
+	# mv ${TomcatDir_8080}/webapps/mhis-siapp-partner $backup_8080/$current_time || (echo "backup 8080 mhis-siapp-partner failed, please manual check" ; exit 4 )
+	 mv ${TomcatDir_8080}/webapps/mhis-siapp-partner $backup_8080/$current_time 
+
+	mv ${TomcatDir_8080}/logs/* $backup_8080/$current_time/logs 
+}
+
+function backup_8081 {
+  current_time="date +%F-%T"
+  # backup .war and logs
+	print_Blue "Start backup 8081"
+	print_Green "Shutdowning 8081"
+	$8081_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
+	
+	[ -d "$backup_8081" ] && echo " 8081 backup dir already exist" || (mkdir -p $backup_8081; echo "mkdir new backup dir 8081" )
+		
+	mkdir $backup_8081/$current_time/logs
+		
+	mv ${TomcatDir_8081}/webapps/mhis-siapp-partner* $backup_8081/$current_time 
+	
+	mv ${TomcatDir_8081}/logs/* $backup_8081/$current_time/logs 
+}
+
+function backup_8082 {
+  current_time="date +%F-%T"
+  # backup .war and logs
+	print_Blue "Start backup 8082"
+	print_Green "Shutdowning 8082"
+	$8082_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
+	
+	[ -d "$backup_8082" ] && echo " 8082 backup dir already exist" || (mkdir -p $backup_8082; echo "mkdir new backup dir 8082" )
+		
+	mkdir $backup_8082/$current_time/logs
+		
+	mv ${TomcatDir_8082}/webapps/mhis-siapp-partner* $backup_8082/$current_time 
+	
+	mv ${TomcatDir_8082}/logs/* $backup_8082/$current_time/logs 
+}
+
+function backup_8083 {
+  current_time="date +%F-%T"
+  # backup .war and logs
+	print_Blue "Start backup 8083"
+	print_Green "Shutdowning 8083"
+	$8083_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
+	
+	[ -d "$backup_8083" ] && echo " 8083 backup dir already exist" || (mkdir -p $backup_8083; echo "mkdir new backup dir 8083" )
+		
+	mkdir $backup_8083/$current_time/logs
+		
+	mv ${TomcatDir_8083}/webapps/mhis-siapp-partner* $backup_8083/$current_time 
+	
+	mv ${TomcatDir_8083}/logs/* $backup_8083/$current_time/logs 
+}
 
 function unzip_partner_war {
 
@@ -109,7 +158,71 @@ function unzip_partner_war {
 # update 3 configuration files.
 	mv -f ./$file1 ./$file2 ./mhis-siapp-partner/WEB-INF/classes && print_Green "move $file1 and $file2 successful" || (print_Red "move $file1 and $file2 failed, Please manual check the reason"; exit 2 )
 	mv -f ./$file3 ./mhis-siapp-partner/WEB-INF/classes/biz && print_Green "move $file3  successful" || ( print_Red "move $file3 failed, Please manual check the reason"; exit 3 )
+}
+
+tomcat_port=s
+tomcat_dir=s
+function check_tomcat_status {
+	#tomcat_port=808x
+	#tomcat_dir=
+	
+	# Check if the port is up
+	port_status=`netstat -lntup | grep "$tomcat_port" | wc -l`
+	echo $port_status
+	[ $port_status -eq 1 ] && print_Green "port $tomcat_port is up" || (print_Red "Port $tomcat_port start FAILED, please manual check " ; exit 7)
+	echo
+	
+	# Check if the log output is normal
+	log_file=$tomcat_dir/logs/fwa/pafa.log
+	rps_lines=`grep "Rps Service Register"  $log_file | wc -l `
+	[ $rps_lines -ge 5 ] && print_Green "$tomcat_port log file seems fine, the $tomcat_port should be ok " || (print_Red "$tomcat_port log file seems not ok, please manual check" ; exit 8)
+	echo
+} 
+
+function deploy_8080 {
+
+
 
 }
+
+
+function case_select {
+
+echo -e "Welcome to the auto deploy script!
+1. Deploy 8080
+2. Deploy 8081
+3. Deploy 8082
+4. Deploy 8083
+0. exit the script
+"
+
+read -p "Please select the number: " num
+case $num in 
+
+1)
+	echo "you select $num 111"
+	;;
+2)
+	echo "you select $num 222"
+	;;
+0)
+	echo "you select $num 000"
+	exit 10
+	;;
+*) 
+	echo "You input 0 or 1 or 2"
+esac
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
