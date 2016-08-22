@@ -178,7 +178,7 @@ function check_tomcat_status {
 	# Check if the log output is normal
 	log_file=$tomcat_dir/logs/fwa/pafa.log
 	rps_lines=`grep "Rps Service Register"  $log_file | wc -l `
-	[ $rps_lines -ge 5 ] && print_Green "$tomcat_port log file seems fine, the tomcat $tomcat_port should be ok " || (print_Red "$tomcat_port log file seems not ok, please manual check" ; exit 8)
+	[ $rps_lines -ge 5 ] && print_Green "$tomcat_port log file seems fine, the $tomcat_port should be ok " || (print_Red "$tomcat_port log file seems not ok, please manual check" ; exit 8)
 	echo
 } 
 
@@ -207,73 +207,25 @@ function deploy_8081 {
     tomcat_dir=$TomcatDir_8081
 
 # Stop Tomcat
-	print_Blue "Stopping tomcat $tomcat_port "
     $tomcat_dir/bin/shutdown.sh ; sleep 7
 
 # Move ms_partner_dir from 8080
     move_ms_partner_dir
 
-# replace the log position
-	sed  -i s/8080/8081/g  $tomcat_dir/webapps/mhis-siapp-partner/WEB-INF/classes/log4j.properties
+# f
 
-	
-# Start Tomcat
-	print_Blue "Starting $tomcat_port Tomcat"
-	$tomcat_dir/bin/startup.sh ; sleep 7
-	
-# Check port status and log information, if Successful
-	check_tomcat_status
-	
+
 }
 
 function deploy_8082 {
-# Define variable
-    tomcat_port=8082
-    tomcat_dir_source=$TomcatDir_8080
-    tomcat_dir=$TomcatDir_8082
 
-# Stop Tomcat
-	print_Blue "Stopping tomcat $tomcat_port "
-    $tomcat_dir/bin/shutdown.sh ; sleep 7
 
-# Move ms_partner_dir from 8080
-    move_ms_partner_dir
 
-# replace the log position
-	sed  -i s/8080/8082/g  $tomcat_dir/webapps/mhis-siapp-partner/WEB-INF/classes/log4j.properties
-	sed  -i s/siappstg/siappprd/g  $tomcat_dir/webapps/mhis-siapp-partner/WEB-INF/classes/log4j.properties
-
-# Start Tomcat
-	print_Blue "Starting $tomcat_port Tomcat"
-	$tomcat_dir/bin/startup.sh ; sleep 7
-
-# Check port status and log information, if Successful
-	check_tomcat_status
 }
 
-
 function deploy_8083 {
-# Define variable
-    tomcat_port=8083
-    tomcat_dir_source=$TomcatDir_8082
-    tomcat_dir=$TomcatDir_8083
 
-# Stop Tomcat
-	print_Blue "Stopping tomcat $tomcat_port "
-    $tomcat_dir/bin/shutdown.sh ; sleep 7
 
-# Move ms_partner_dir from 8080
-    move_ms_partner_dir
-
-# replace the log position
-	sed  -i s/8082/8083/g  $tomcat_dir/webapps/mhis-siapp-partner/WEB-INF/classes/log4j.properties
-
-# Start Tomcat
-	print_Blue "Starting $tomcat_port Tomcat"
-	$tomcat_dir/bin/startup.sh ; sleep 7
-
-# Check port status and log information, if Successful
-	check_tomcat_status
 
 }
 
@@ -293,52 +245,28 @@ read -p "Please select the number: " num
 case $num in 
 
 1)
-	echo "you select $num"
-	print_Blue "---- Start deploy stg 8080 Tomcat  ----"
-	
-	deploy_8080
-	
-	print_Blue "---- End deploy stg 8080 Tomcat  ----"
+	echo "you select $num 111"
 	;;
 2)
-	echo "you select $num"
-	print_Blue "---- Start deploy stg 8081 Tomcat  ----"
-	
-	deploy_8081
-	
-	print_Blue "---- End deploy stg 8081 Tomcat  ----"
+	echo "you select $num 222"
 	;;
-
-3)
-	echo "you select $num"
-	print_Blue "---- Start deploy stg 8082 Tomcat  ----"
-	
-	deploy_8082
-	
-	print_Blue "---- End deploy stg 8082 Tomcat  ----"
-	;;
-
-4)
-	echo "you select $num"
-	print_Blue "---- Start deploy stg 8083 Tomcat  ----"
-	
-	deploy_8083
-	
-	print_Blue "---- End deploy stg 8083 Tomcat  ----"
-	;;
-	
 0)
-	echo "you select $num , exiting... "
+	echo "you select $num 000"
 	exit 10
 	;;
 *) 
-	echo "Please input 0 or 1 or 2 or 3 or 4"
+	echo "Please input 0 or 1 or 2"
 esac
 
 }
 
 
-case_select
+
+
+
+
+
+
 
 
 
