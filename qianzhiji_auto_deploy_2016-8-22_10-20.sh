@@ -78,14 +78,14 @@ function backup_8080 {
   # backup .war and logs
 	print_Blue "Start backup 8080"
 	print_Green "Shutdowning 8080"
-	$TomcatDir_8080/bin/shutdown.sh ; sleep 10 ;
+	$8080_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
 	
 	[ -d "$backup_8080" ] && echo " 8080 backup dir already exist" || (mkdir -p $backup_8080; echo "mkdir new backup dir 8080" )
 		
 	mkdir $backup_8080/$current_time/logs
 		
 	# mv ${TomcatDir_8080}/webapps/mhis-siapp-partner $backup_8080/$current_time || (echo "backup 8080 mhis-siapp-partner failed, please manual check" ; exit 4 )
-    mv ${TomcatDir_8080}/webapps/mhis-siapp-partner $backup_8080/$current_time
+	 mv ${TomcatDir_8080}/webapps/mhis-siapp-partner $backup_8080/$current_time 
 
 	mv ${TomcatDir_8080}/logs/* $backup_8080/$current_time/logs 
 }
@@ -95,7 +95,7 @@ function backup_8081 {
   # backup .war and logs
 	print_Blue "Start backup 8081"
 	print_Green "Shutdowning 8081"
-	$TomcatDir_8081/bin/shutdown.sh ; sleep 10 ;
+	$8081_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
 	
 	[ -d "$backup_8081" ] && echo " 8081 backup dir already exist" || (mkdir -p $backup_8081; echo "mkdir new backup dir 8081" )
 		
@@ -111,7 +111,7 @@ function backup_8082 {
   # backup .war and logs
 	print_Blue "Start backup 8082"
 	print_Green "Shutdowning 8082"
-	$TomcatDir/bin/shutdown.sh ; sleep 10 ;
+	$8082_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
 	
 	[ -d "$backup_8082" ] && echo " 8082 backup dir already exist" || (mkdir -p $backup_8082; echo "mkdir new backup dir 8082" )
 		
@@ -127,7 +127,7 @@ function backup_8083 {
   # backup .war and logs
 	print_Blue "Start backup 8083"
 	print_Green "Shutdowning 8083"
-	$TomcatDir_8083/bin/shutdown.sh ; sleep 10 ;
+	$8083_TomcatDir/bin/shutdown.sh ; sleep 10 ;  
 	
 	[ -d "$backup_8083" ] && echo " 8083 backup dir already exist" || (mkdir -p $backup_8083; echo "mkdir new backup dir 8083" )
 		
@@ -139,9 +139,10 @@ function backup_8083 {
 }
 
 function unzip_partner_war {
+
 # Decompress the .war file.
 	cd ${TomcatDir_8080}/webapps
-	jar -xf $partner_war
+	jar -xf $partner_war #&& echo "Decompress successful" || ecgi "Decompress failed"
 	if [[ $? -eq 0  ]]; 
 	then 
 		print_Green "Decompress .war successful" 
@@ -154,16 +155,6 @@ function unzip_partner_war {
 	mv -f ./$file1 ./$file2 ./mhis-siapp-partner/WEB-INF/classes && print_Green "move $file1 and $file2 successful" || (print_Red "move $file1 and $file2 failed, Please manual check the reason"; exit 2 )
 	mv -f ./$file3 ./mhis-siapp-partner/WEB-INF/classes/biz && print_Green "move $file3  successful" || ( print_Red "move $file3 failed, Please manual check the reason"; exit 3 )
 }
-
-
-tomcat_dir_source=
-tomcat_dir=
-function move_ms_partner_dir {
-    # tomcat_dir_last=$TomcatDir_8080
-    cd $tomcat_dir/webapps && (cp -r $tomcat_dir_source/webapps/mhis-siapp-partner . ; print_Green "move mhis-siapp-partner to $tomcat_dir/webapps successful" ) || ( move mhis-siapp-partner to $tomcat_dir/webapps Failed, Please manual check; exit 8 )
-
-}
-
 
 function check_tomcat_status {
 	#tomcat_port=808x
@@ -183,36 +174,13 @@ function check_tomcat_status {
 } 
 
 function deploy_8080 {
-# Define variable
-    tomcat_port=8080
-    tomcat_dir=$TomcatDir_8080
-
-# Stop tomcat
-    $tomcat_dir/bin/shutdown.sh ; sleep 7
 
 
-# Backup files and logs.
-    backup_8080
-    unzip_partner_war
 
-# Start Tomcat
-    check_tomcat_status
 }
 
-
 function deploy_8081 {
-# Define variable
-    tomcat_port=8081
-    tomcat_dir_source=$TomcatDir_8080
-    tomcat_dir=$TomcatDir_8081
 
-# Stop Tomcat
-    $tomcat_dir/bin/shutdown.sh ; sleep 7
-
-# Move ms_partner_dir from 8080
-    move_ms_partner_dir
-
-# f
 
 
 }
@@ -255,7 +223,7 @@ case $num in
 	exit 10
 	;;
 *) 
-	echo "Please input 0 or 1 or 2"
+	echo "You input 0 or 1 or 2"
 esac
 
 }
