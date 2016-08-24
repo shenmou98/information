@@ -4,18 +4,16 @@
 # File:			qianzhiji_auto_deploy.sh
 # Description:	For QianZhiJi auto deploy.
 # Requirement:	Before run this script, please upload related files as mentioned to related dir.
-# Usage: 		bash qianzhiji_auto_deploy.sh
-# Author:		ShenYaJun, hiyajun@126.com
+# Usage: 		bash ./qianzhiji_auto_deploy.sh
+# Author:		ShenYaJun, shenyajun317@pingan.com.cn, hiyajun@126.com
 # Organization:	
 # Created:		2016.8.21 21:28
 # Revision:		0.1
 ###########################################################
 
 # 目前这个脚本， 整体差不多都写完了， 剩下的主要就是修补了。 
-# jar 命令换成 unzip ? 因为有的机器上没有 jar 命令
 
-# 写一个判断是否把几个文件都上传上来的判断？ 
-# aaaaa
+# 数据库相关的配置文件更改的函数，还没有完成！！！！
 
 # 每次重新测试前需要做的事情
 #	a. 把三个配置文件拷贝到  webapps 目录下边
@@ -27,8 +25,8 @@ prd_Dir=/home/siappprd
 TomcatDir_8080=$stg_Dir/apache-tomcat-7.0.70-8080    # STG 1
 TomcatDir_8081=$stg_Dir/apache-tomcat-7.0.70-8081    # STG 2
 
-TomcatDir_8082=$prd_Dir/apache-tomcat-7.0.70-8082    # PRD 3
-TomcatDir_8083=$prd_Dir/apache-tomcat-7.0.70-8083    # PRD 4
+TomcatDir_8082=$prd_Dir/apache-tomcat-7.0.70-8082    # PRD 1
+TomcatDir_8083=$prd_Dir/apache-tomcat-7.0.70-8083    # PRD 2
 
 partner_war=mhis-siapp-partner
 file1=context-siapp-partner.properties
@@ -40,7 +38,6 @@ backup_8080=$backup_dir/8080
 backup_8081=$backup_dir/8081
 backup_8082=$backup_dir/8082
 backup_8083=$backup_dir/8083
-
 
 
 # 打印红色信息
@@ -70,16 +67,15 @@ function reminder_upload_files {
   b. context-siapp-partner.properties 
   c. log4j.properties
   d. siapp-partner-context.xml "
-        
+  
+		print_Red "Please also make sure the DB CONNECTION information in conf/server.xml is correct."
+  
         echo 
-        echo 
-        print_Red "If you have upload all the mentioned files, please select 1 to continuea;  If not, please select 0 to exit and then upload the mentioned files"
+        print_Red "If you have UPLOAD all the mentioned files, please select 1 to continuea;  If not, please select 0 to exit and then upload the mentioned files"
 }
 
 
-
-
-# This function will backup all mhis-siapp-partner Dir and all logs.
+# The backup functions will backup  mhis-siapp-partner Dir and all logs to /tmp/tomcat_backup .
 function backup_8080 {
   current_time=`date +%F-%T`
   # backup .war and logs
@@ -147,7 +143,7 @@ function backup_8083 {
 
 
 function unzip_partner_war {
-# Decompress the .war file.
+# Decompress the .war file with unzip command.
 	cd ${TomcatDir_8080}/webapps
 	#jar -xf $partner_war
 	unzip -q  $partner_war.war -d ./$partner_war
@@ -364,8 +360,3 @@ esac
 
 
 case_select
-
-
-
-
-
