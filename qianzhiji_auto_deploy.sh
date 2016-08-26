@@ -63,7 +63,7 @@ function print_Blue {
 function reminder_upload_files {
         print_Green "Please upload files to $TomcatDir_8080/webapps, the files are: "        
 		print_Blue "
-  a. mhis-siapp-partner 
+  a. mhis-siapp-partner.war 
   b. context-siapp-partner.properties 
   c. log4j.properties
   d. siapp-partner-context.xml "
