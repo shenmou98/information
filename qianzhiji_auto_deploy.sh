@@ -5,7 +5,7 @@
 # Description:	For QianZhiJi auto deploy.
 # Requirement:	Before run this script, please upload related files as mentioned to related dir.
 # Usage: 		bash ./qianzhiji_auto_deploy.sh
-# Author:		ShenYaJun, shenyajun317@pingan.com.cn, hiyajun@126.com
+# Author:		hiyajun@126.com
 # Organization:	
 # Created:		2016.8.21 21:28
 # Revision:		0.1
